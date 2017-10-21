@@ -41,5 +41,5 @@ def to_data_volcano(data_frame):
 if __name__ == '__main__':
     Data = CSV_opening('/home/fabien/Documents/volcano-f/data.csv')
     data_volcano = to_data_volcano(Data)
-
+    data_volcano.columns = ['prot_id',' -log(pvalue)','log(fc)']
     print(data_volcano)
