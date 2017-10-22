@@ -8,7 +8,6 @@
 import pandas as pd
 import math as m
 import numpy as np
-import datetime
 
 def CSV_opening(path):
     """
@@ -19,8 +18,6 @@ def CSV_opening(path):
                            names = ['id','pvalue','A','B'],
                            na_filter = True,
                            na_values =" NaN")
-
-
     data_sans = data_csv.dropna(subset = ['id', 'pvalue', 'A', 'B' ])
     return data_sans
 
@@ -36,10 +33,5 @@ def to_data_volcano(data_frame):
         fc =  - round(m.log10(row[3]/row[4]),4)
         tmp = pd.Series([dt,logp,fc])
         DF = DF.append(tmp,ignore_index=True)
+    DF.columns = ['prot_id','-log(pvalue)','log(fc)']
     return DF
-
-if __name__ == '__main__':
-    Data = CSV_opening('/home/fabien/Documents/volcano-f/data.csv')
-    data_volcano = to_data_volcano(Data)
-    data_volcano.columns = ['prot_id',' -log(pvalue)','log(fc)']
-    print(data_volcano)
