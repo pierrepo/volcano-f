@@ -1,5 +1,0 @@
-plotly
-flask
-pandas
-dash
-matplotlib
