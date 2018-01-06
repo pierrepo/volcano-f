@@ -5,7 +5,7 @@
 
 # importing librairy
 from bokeh.plotting import figure, output_file, show,ColumnDataSource
-from bokeh.models import HoverTool,Span,Slider, CustomJS
+from bokeh.models import HoverTool,Span,Slider, CustomJS,CategoricalColorMapper
 from bokeh.layouts import row, widgetbox
 from bokeh.models.widgets import *
 import opening_csv as cs
@@ -62,17 +62,11 @@ def volcano_plot(data_sans):
     v_slider_left = Slider(start =xrange[0], end=0, value=1, step=.01,title="left log fold change")
 
 
-    # Horizontal line
-    hline = Span(location=h_slider.value, dimension='width', line_color='green', line_width=2)
-    # Vertical line
-    vline1 = Span(location =v_slider_right.value , dimension='height', line_color='blue', line_width=2)
-    vline2 = Span(location=v_slider_left.value, dimension='height', line_color='black', line_width=2)
-
+    #setting the widgets slider
+    h_slider = Slider(start=yrange[0],end=yrange[1], value=1, step=.1, title="variation of log(pvalue)")
+    v_slider_right = Slider(start = 0, end = xrange[1], value=0.5, step=.01,title="right fold change")
+    v_slider_left = Slider(start =xrange[0], end=0, value=-0.5, step=.01,title="left log fold change")
     p.renderers.extend([vline1,vline2, hline])
-
-
-    # output to static HTML file
-    output_file("vocano_pot.html",title="volcano plot")
 
     # add a circle points
     p.circle('x','y',source = source)
@@ -88,17 +82,13 @@ def volcano_plot(data_sans):
                ]
     data_table = DataTable(source=source, columns=columns, width=400, height=280)
 
-    '''
+
     def update_data_frame(attrname, old, new):
 
         #prendre les valeurs des slider
         low =  v_slider_left.value
         up = v_slider_right.value
         back_value = h_slider.value
-
-        low = -0.20
-        up = 0.26
-        back_value = 4,20
 
         # creation des nouveaux dataframe ciblés up_regulated et
 
@@ -111,10 +101,8 @@ def volcano_plot(data_sans):
                 df_low.append(buff)
 
 
-    '''
     # show the results
     layout = row(p, widgetbox(v_slider_left,v_slider_right,h_slider,data_table ))
-    show(layout)
     return layout
 
 
