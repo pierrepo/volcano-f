@@ -2,26 +2,29 @@
 import os,shutil
 from flask import *
 from werkzeug.utils import secure_filename
-import opening_csv as cs
-from bokeh.models import HoverTool,Span,Slider, CustomJS
-from bokeh.layouts import row, widgetbox
-from bokeh.models.widgets import *
-import pandas as pd
-import numpy as np
-from bokeh.embed import components
-from bokeh import *
-from bokeh.plotting import figure,ColumnDataSource
+from bokeh.embed import components,autoload_static
+from bokeh.resources import CDN
 import plot as d
+import uniprot_map_identifiers as uni
+import opening_csv as cs
 
 #set the download prefereces
 UPLOAD_FOLDER = 'upload_data'
 ALLOWED_EXTENSIONS = set(['txt','csv'])
 
 def allowed_file(filename):
+    """
+    input : filename
+    output : extension du fichier
+    return the file extension
+    output """
     return '.' in filename and \
     filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def delete_file():
+    """
+    this function is used to delete files upload before the current sesion
+    """
     path = os.path.dirname(os.path.abspath('routes.py'))
     path = path.replace('/templates','')
     path = path +'/upload_data'
@@ -32,7 +35,9 @@ def delete_file():
                 os.unlink(file_path)
         except Exception as e:
             print(e)
+
 def path_to_csv():
+    #return the path of the csv files
     path = os.path.dirname(os.path.abspath('routes.py'))
     path = path.replace('/templates','')
     path = path +'/upload_data'
@@ -48,6 +53,10 @@ app.secret_key = 'super secret key'
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
+    """
+    This page allow the user to upload their own CSV in order to analyse it.
+    redirect directly to the plot page
+    """
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
@@ -68,17 +77,25 @@ def home():
 
 @app.route('/plot')
 def plot():
+    """
+    This page show the volcano plot of the slelcted data.
+    plus the possiblility to download the update board
+    """
     data_sans = cs.CSV_opening(path_to_csv())
     # Create the plot
     graph = d.volcano_plot(data_sans)
-
-    # Embed plot into HTML via Flask Render
     script, div = components(graph)
     return render_template("plot.html", script=script, div=div)
 
 @app.route('/board')
 def board():
-  return render_template('board.html')
+    """
+    Dislay the value seleted in the  previous plot and gather data online
+    with an rest api
+    """
+    filename ="test"
+    data = uni.set_sub_table("data_table/data_down.csv")
+    return render_template("board.html", name=filename, data=data)
 
 @app.route('/about')
 def about():
