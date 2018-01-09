@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <h2>Boardt</h2>
+  <p>Boar from the volcano plot.</p>
+  {{ data.to_html(classes="table table-striped") | safe}}
+{% endblock %}
+
+
+ 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.2.1/dt-1.10.16/b-1.5.1/b-colvis-1.5.1/b-flash-1.5.1/b-html5-1.5.1/b-print-1.5.1/r-2.2.1/datatables.min.js"></script>
