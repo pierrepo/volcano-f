@@ -17,7 +17,7 @@ python -m pip install pip --upgrade --user
 __installation de l'environnement virtuel__  
 pip install virtualenv
 
-__  activatetion de l'environnement virtuel__  
+__activatetion de l'environnement virtuel__  
 virtualenv -p python3 volcano-env
 source volcano-env/bin/activate
 
