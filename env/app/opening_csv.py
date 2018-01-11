@@ -11,18 +11,25 @@ import numpy as np
 
 # opening CVS file, cleaning data and computing the data for the volcano plot
 def CSV_opening(path):
+    path ="data.csv"
     """
     Opening the CSV file and cleaning the file with Na and
     preparing the data for the volcano plot
     """
     #getting csv data into pandas DataFrame
-    path = "data.csv"
+
     data_csv = pd.read_csv( path,
                            sep = '\t',
                            names = ['acession','pvalue','fc'],
                            na_filter = True,
                            na_values =" NaN",
                            header = 0 )
+    data_csv = data_csv[data_csv.fc > 0]
+    data_csv = data_csv[data_csv.pvalue > 0]
+    #data_csv.replace([np.inf, -np.inf], np.nan)
+    #data_csv.dropna()
+    data_csv[data_csv.fc != float('Inf')
+]
     DF = pd.DataFrame()
     #add a column with three names
     for row in data_csv.itertuples():
@@ -31,8 +38,8 @@ def CSV_opening(path):
         fc =   m.log2(row[3])
         tmp = pd.Series([dt,logp,fc])
         DF = DF.append(tmp,ignore_index=True)
-        DF['position'] = "normal"
-        
+
+    DF['position'] = "normal"
     DF.columns = ['access','pvalue','logfc','pos']
     DF.loc[((DF.logfc < -0.5) & (DF.pvalue > 1)) ,['pos']] = "down"
     DF.loc[((DF.logfc > 0.5) & (DF.pvalue > 1)) ,['pos']] = "up"
