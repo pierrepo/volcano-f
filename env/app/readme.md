@@ -31,3 +31,7 @@ pip install -r requirements.txt
 __l’exécution du server se fait sous Linux__  
 
 python routes.py
+
+cliquez sur l'adresse locale
+
+
